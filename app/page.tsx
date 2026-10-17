@@ -186,14 +186,13 @@ const Hero3DScene = () => {
 // ==========================================
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home');
+  // Add this new state for the year:
+  const [currentYear, setCurrentYear] = useState('');
 
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(id);
-    }
-  };
+  // Add this useEffect to set the year only on the client:
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear().toString());
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#050811] text-slate-300 font-sans selection:bg-[#00F0FF] selection:text-[#050811]">
@@ -204,10 +203,10 @@ export default function Portfolio() {
             ST<span className="text-[#00F0FF]">.</span>
           </div>
           <div className="hidden md:flex space-x-8 text-sm font-medium">
-            {['about', 'skills', 'projects', 'journey'].map((item) => (
+            {['home', 'skills', 'projects', 'journey'].map((item) => (
               <button 
                 key={item}
-                onClick={() => scrollTo(item)}
+                onClick={() => handleScrollTo(item)}
                 className={`capitalize transition-colors hover:text-[#D4FF33] ${activeSection === item ? 'text-white' : 'text-slate-400'}`}
               >
                 {item}
@@ -215,7 +214,7 @@ export default function Portfolio() {
             ))}
           </div>
           <button 
-            onClick={() => scrollTo('contact')}
+            onClick={() => handleScrollTo('contact')}
             className="px-5 py-2 text-sm font-semibold rounded-full border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all"
           >
             Contact
@@ -245,10 +244,10 @@ export default function Portfolio() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={() => scrollTo('projects')} className="w-full sm:w-auto px-8 py-4 bg-white text-[#050811] font-bold rounded-full hover:bg-[#D4FF33] transition-colors">
+            <button onClick={() => handleScrollTo('projects')} className="w-full sm:w-auto px-8 py-4 bg-white text-[#050811] font-bold rounded-full hover:bg-[#D4FF33] transition-colors">
               Explore My Work
             </button>
-            <button onClick={() => scrollTo('contact')} className="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold rounded-full border border-white/20 hover:border-white/50 transition-colors">
+            <button onClick={() => handleScrollTo('contact')} className="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold rounded-full border border-white/20 hover:border-white/50 transition-colors">
               Get In Touch
             </button>
           </div>
@@ -385,7 +384,7 @@ export default function Portfolio() {
           </div>
           
           <footer className="flex flex-col md:flex-row items-center justify-between text-sm text-slate-500">
-            <p> {new Date().getFullYear()} {PORTFOLIO_DATA.about.name}. All rights reserved.</p>
+          <p>© {currentYear || '2024'} {PORTFOLIO_DATA.about.name}. All rights reserved.</p>
             <p className="mt-2 md:mt-0 flex items-center gap-1">
               Built with Next.js & Three.js <span className="text-[#D4FF33]">✦</span>
             </p>
